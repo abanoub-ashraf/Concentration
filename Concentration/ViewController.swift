@@ -1,13 +1,25 @@
 import UIKit
 
+//one of the Controller Module
 class ViewController: UIViewController {
     
-    //to count how many flips
+    // by this variable, now our controller is talking to our model
+    /******************************************************************************
+     * + 1 cause in case i have odd numbers of cards i won't be able to get pairs
+     * / 2 to get pairs of cards
+     * lazy: it doesn't actually intialize until someone grabs it,
+       until someone tries touse this variable then just gonna intialize it
+     * "lazy" counts as this variable is intialized
+     * it can't have a didSet { } Block, you can't use property Observer with it
+     *****************************************************************************/
+    lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
+    
+    //to count how many flips happenes when we click on any button
     var flipCount = 0 {
         //property observer
         /*****************************************************************************
-         every time a chnge'll happen to this variable, this block will get executed
-         used to keep the ui in sync with the class's variables
+         every time a chnge'll happen to this variable, this block will get executed,
+         used to keep the UI in sync with the class's variables
         *****************************************************************************/
         /* instead of coping what's inside the block many times */
         didSet {
@@ -29,6 +41,7 @@ class ViewController: UIViewController {
      I'm gonna look up in another array the emoji to put there
     ************************************************************************/
     
+    // the _ means don't give this function an external name when you call it
     @IBAction func touchCard(_ sender: UIButton) {
         flipCount += 1
         
@@ -36,7 +49,9 @@ class ViewController: UIViewController {
         //let cardNumber = cardButtons.index(of: sender)!
         
         //this is how to fix if nil exesits
+        //assign the index of each button in the array buttons to a constant
         if let cardNumber = cardButtons.index(of: sender) {
+            //then use this constant as index of the emojies array
             flipCard(withEmoji: emojiChoices[cardNumber], on: sender)
         } else {
             print("chosen card was not in cardButtons!")
